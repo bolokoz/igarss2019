@@ -1,0 +1,229 @@
+% Template for IGARSS-2018 paper; to be used with:
+%          spconf.sty  - LaTeX style file, and
+%          IEEEbib.bst - IEEE bibliography style file.
+% --------------------------------------------------------------------------
+\documentclass{article}
+\usepackage{spconf,amsmath,epsfig}
+
+% Example definitions.
+% --------------------
+\def\x{{\mathbf x}}
+\def\L{{\cal L}}
+
+% Title.
+% ------
+\title{ASPHALT POTHOLE DETECTION AND VOLUME ESTIMATION USING UAV IMAGES}
+%
+% Single address.
+% ---------------
+\name{Becker Y. V. F., Marcato Jr. J.}
+\address{School C-D\\
+	Department C-D\\
+	Address C-D}
+%
+% For example:
+% ------------
+%\address{School\\
+%	Department\\
+%	Address}
+%
+% Two addresses (uncomment and modify for two-address case).
+% ----------------------------------------------------------
+%\twoauthors
+%  {A. Author-one, B. Author-two\sthanks{Thanks to XYZ agency for funding.}}
+%	{School A-B\\
+%	Department A-B\\
+%	Address A-B}
+%  {C. Author-three, D. Author-four\sthanks{The fourth author performed the work
+%	while at ...}}
+%	{School C-D\\
+%	Department C-D\\
+%	Address C-D}
+%
+\begin{document}
+%\ninept
+%
+\maketitle
+%
+\begin{abstract}
+Transportation infrastructure needs constant maintenance. Pavement management systems requires reliable and detailed data of the current state of the roads to make effective decisions. Currently, pavement condition evaluation methods are mostly performed manually with visual inspection and interpretations in situ, which is labor intensive, time consuming and expensive. In this paper an experiment was conducted where Convolutional Neural Networks (CNNs) were applied to automatically detect potholes and UAV Photogrammetry was used to estimate their volumes. Results showed that through Structure from Motion (SfM) it is possible to estimate missing pothole volumes and the use of Ground Control Points (GCPs) doesn’t impact significantly overall measures. Using CNNs for pothole detection, it was found that the Faster-RCNN Inception ResNet model with reduced anchor box stride and image augmentation applied provides better accuracy compared to several other models tested, obtaining accuracy for this experiment of 70.4\% across five-fold cross validation.
+
+
+\end{abstract}
+%
+\begin{keywords}
+Remote Sensing, convolutional neural network, photogrammetry.
+\end{keywords}
+%
+\section{Introduction}
+\label{sec:intro}
+
+Considering the importance of the road network for the economy and logistic of a country, it is essential to ensure good pavement performance and safe driving conditions. Therefore, periodic road health monitoring surveys are required to collect information about the current road quality to better manage infrastructure maintenance (Salman et al., 2013). There are several issues with manual inspections. According to Salman et al. (2013), these measures suffer heavily from the associated subjectivity of human decision making. High labor cost, time consumption and dangers intrinsic to road inspections are other factors that reduce the periodicity of survey procedures (Shi et al., 2016).
+
+In comparison, automated surveying systems can be fast, accurate and eliminates the subjectivity involved in human inspections (Salman et al., 2013). Combined with the ever-increasing availability of low cost and high-quality UAVs and digital cameras in the last decade, the necessity of automation enabled research, creation and deployment of many different computer vision systems for automated surveys (Koch et al., 2015).
+
+In this paper, two approaches for automatically detecting potholes that do not rely much on these commonly CV methods are investigated. In order to take advantage of the increasing affordability of aerial images, on account of the popularization of UAVs, a method based on photogrammetry and neural networks is proposed. Structure from Motion (SfM) is used to produce high resolution topography from randomly oriented distributed images (Colomina and Molina, 2014). The advantage is that it generates a Digital Surface Model (DSM) using only optical sensors, transforming 2D data into 3D information. This method has been extensively compared to established topology methods, such as laser scanner techniques, results are very similar in precision (Gehrke et al., 2008). Another advantage to the normally used laser alternatives, SfM using RBG cameras reduces total cost and UAV payload, which extends its flight time (Koch and Brilakis, 2011). These monetary and time advantages can lead to more frequent road inspection (Mohan and Poobal 2017) and infrastructure agencies are able to schedule repairs interventions more effectively (Tedeschi and Benedetto, 2017). The second method investigated is Convolutional Neural Networks (CNN), which is a supervised machine learning method. This type of artificial intelligence automatically learns features from the images, in contrast to the classical hand-craft computed vision algorithms that needs precise tuning of parameters and thresholds (Varadharajan et al., 2014). This method was chosen because CNNs learn features by feeding large quantity of data to the network, which can now be easily obtainable by the UAVs. As in 2D image object detection there are a lot of randomness associated with features geometry, pixel brightness and textures which are difficult to predict using classical methods, contrarily to CNNs, which are able to overcome this through convolution operations (Salman et al., 2013).
+
+\section{Proposed Method}
+\label{sec:method}
+
+The objective of this study is to investigate methods that automatically detect the presence of a pothole and estimate its volume, given one or a sequence of aerial images of a region that contains paved roads taken by an UAV.
+The proposed solution is based on two main lines: Convolutional Neural Network (CNN) for object detection and Structure from Motion (SfM) for modeling a 3D surface and detecting the potholes through depth and volumetric measurements. An experiment was conducted to test both these methods.
+
+An UAV (DJI Phantom 4 Advanced) was used to collect images from roads that contained several potholes along its length. The chosen pavement segments had elements which were expected to be found in real case scenarios such as: trees casting shadows, parked cars covering part of the asphalt, unclear pavement boundary with the sidewalk and presence of low vegetation. Images were collected from different dates and heights: 2, 9, 25 and 50 meters above ground. 
+
+
+\subsection{Convolutional Neural Network}
+\label{sec:pagestyle}
+
+In this phase, the following parameters were tested to check which produces better results: UAV flying height, image resolution, data augmentation, detection algorithm and pre-trained models.
+A total of 300 images were captured in different heights, light conditions and contexts. For each image, potholes were manually labeled using a free opensource software named LabelImg, (Tzutalin, 2015). After all potholes were labeled, data augmentation was applied in some data subsets using another free opensource Python library: imgaug (Alexander Jung, 2016). Data augmentation is important in machine learning experiments as it increases the amount of training data (Wang and Perez, 2017) and avoids overfitting, as the model generalizes better (Huang et al., 2017). Each image was copied 10 times and augmentations were randomly applied for each image. The operations used were translation, horizontal flip, Gaussian blur and single channel brightness amplifier. 
+
+\section{TYPE-STYLE AND FONTS}
+\label{sec:typestyle}
+
+To achieve the best rendering in the proceedings, we
+strongly encourage you to use Times-Roman font.  In addition, this will give
+the proceedings a more uniform look.  Use a font that is no smaller than nine
+point type throughout the paper, including figure captions.
+
+In nine point type font, capital letters are 2 mm high.  If you use the
+smallest point size, there should be no more than 3.2 lines/cm (8 lines/inch)
+vertically.  This is a minimum spacing; 2.75 lines/cm (7 lines/inch) will make
+the paper much more readable.  Larger type sizes require correspondingly larger
+vertical spacing.  Please do not double-space your paper.  True-Type 1 fonts
+are preferred.
+
+The first paragraph in each section should not be indented, but all the
+following paragraphs within the section should be indented as these paragraphs
+demonstrate.
+
+\section{MAJOR HEADINGS}
+\label{sec:majhead}
+
+Major headings, for example, "1. Introduction", should appear in all capital
+letters, bold face if possible, centered in the column, with one blank line
+before, and one blank line after. Use a period (".") after the heading number,
+not a colon.
+
+\subsection{Subheadings}
+\label{ssec:subhead}
+
+Subheadings should appear in lower case (initial word capitalized) in
+boldface.  They should start at the left margin on a separate line.
+ 
+\subsubsection{Sub-subheadings}
+\label{sssec:subsubhead}
+
+Sub-subheadings, as in this paragraph, are discouraged. However, if you
+must use them, they should appear in lower case (initial word
+capitalized) and start at the left margin on a separate line, with paragraph
+text beginning on the following line.  They should be in italics.
+
+\section{PRINTING YOUR PAPER}
+\label{sec:print}
+
+Print your properly formatted text on high-quality, 8.5 x 11-inch white printer
+paper. A4 paper is also acceptable, but please leave the extra 0.5 inch (12 mm)
+empty at the BOTTOM of the page and follow the top and left margins as
+specified.  If the last page of your paper is only partially filled, arrange
+the columns so that they are evenly balanced if possible, rather than having
+one long column.
+
+In LaTeX, to start a new column (but not a new page) and help balance the
+last-page column lengths, you can use the command ``$\backslash$pagebreak'' as
+demonstrated on this page (see the LaTeX source below).
+
+\section{PAGE NUMBERING}
+\label{sec:page}
+
+Please do {\bf not} paginate your paper.  Page numbers, session numbers, and
+conference identification will be inserted when the paper is included in the
+proceedings.
+
+\section{ILLUSTRATIONS, GRAPHS, AND PHOTOGRAPHS}
+\label{sec:illust}
+
+Illustrations must appear within the designated margins.  They may span the two
+columns.  If possible, position illustrations at the top of columns, rather
+than in the middle or at the bottom.  Caption and number every illustration.
+All illustrations should be clear wwhen printed on a black-only printer. Color
+may be used.
+
+Since there are many ways, often incompatible, of including images (e.g., with
+experimental results) in a LaTeX document, below is an example of how to do
+this \cite{Lamp86}.
+
+% Below is an example of how to insert images. Delete the ``\vspace'' line,
+% uncomment the preceding line ``\centerline...'' and replace ``imageX.ps''
+% with a suitable PostScript file name.
+% -------------------------------------------------------------------------
+\begin{figure}[htb]
+
+\begin{minipage}[b]{1.0\linewidth}
+  \centering
+% \centerline{\epsfig{figure=image1.ps,width=8.5cm}}
+  \vspace{2.0cm}
+  \centerline{(a) Result 1}\medskip
+\end{minipage}
+%
+\begin{minipage}[b]{.48\linewidth}
+  \centering
+% \centerline{\epsfig{figure=image3.ps,width=4.0cm}}
+  \vspace{1.5cm}
+  \centerline{(b) Results 3}\medskip
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.48\linewidth}
+  \centering
+% \centerline{\epsfig{figure=image4.ps,width=4.0cm}}
+  \vspace{1.5cm}
+  \centerline{(c) Result 4}\medskip
+\end{minipage}
+%
+\caption{Example of placing a figure with experimental results.}
+\label{fig:res}
+%
+\end{figure}
+
+% To start a new column (but not a new page) and help balance the last-page
+% column length use \vfill\pagebreak.
+% -------------------------------------------------------------------------
+\vfill
+\pagebreak
+
+
+\section{FOOTNOTES}
+\label{sec:foot}
+
+Use footnotes sparingly (or not at all!) and place them at the bottom of the
+column on the page on which they are referenced. Use Times 9-point type,
+single-spaced. To help your readers, avoid using footnotes altogether and
+include necessary peripheral observations in the text (within parentheses, if
+you prefer, as in this sentence).
+
+
+\section{COPYRIGHT FORMS}
+\label{sec:copyright}
+
+You must also electronically sign the IEEE copyright transfer
+form when you submit your paper. We {\bf must} have this form
+before your paper can be sent to the reviewers or published in
+the proceedings. The copyright form is provided through the IEEE
+website for electronic signature. A link is provided upon
+submission of the manuscript to enter the IEEE Electronic
+Copyright Form system.
+
+\section{REFERENCES}
+\label{sec:ref}
+
+List and number all bibliographical references at the end of the paper.  The references can be numbered in alphabetic order or in order of appearance in the document.  When referring to them in the text, type the corresponding reference number in square brackets as shown at the end of this sentence \cite{C2}.
+
+% References should be produced using the bibtex program from suitable
+% BiBTeX files (here: strings, refs, manuals). The IEEEbib.bst bibliography
+% style file from IEEE produces unsorted bibliography list.
+% -------------------------------------------------------------------------
+\bibliographystyle{IEEEbib}
+\bibliography{strings,refs}
+
+\end{document}
